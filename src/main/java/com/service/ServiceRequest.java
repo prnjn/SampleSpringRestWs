@@ -1,6 +1,7 @@
 package com.service;
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.beans.EmployeeResponseData;
 import com.dao.RetrieveBusinessData;
 import com.exception.EmployeeNotFoundException;
+import com.exception.InvalidRequestDataException;
 
 @Service
 public class ServiceRequest {
@@ -17,18 +19,24 @@ public class ServiceRequest {
 	@Autowired
 	private RetrieveBusinessData retrieveBusinessData;
 	
-	public EmployeeResponseData getEmployeeDetails(int empId) {
+	public EmployeeResponseData getEmployeeDetails(String empId) throws EmployeeNotFoundException,InvalidRequestDataException{
 		EmployeeResponseData employeeResponseData=null;
 		
-		if(empId==756560) {
-			 employeeResponseData =retrieveBusinessData.retrieveEmployeeDetails(empId);
+		if(isValidEmployeeID(empId)) {
+			 int employeeId = Integer.parseInt(empId);
+			 employeeResponseData =retrieveBusinessData.retrieveEmployeeDetails(employeeId);
 		}else {
-			try {
-				throw new EmployeeNotFoundException(empId);
-			} catch (EmployeeNotFoundException e) {
-				LOGGER.info("Employee data not found for empId :"+empId);
-			}
+				LOGGER.info("Invaid Employee Id in request : "+empId);
+				throw new InvalidRequestDataException(empId);
 		}
 		return employeeResponseData;
 	}
+	
+	private boolean isValidEmployeeID(String empId) {
+		boolean isValidEmp = false;
+		isValidEmp=StringUtils.isNumeric(empId);
+		return isValidEmp;
+	}
+	
+	
 }
