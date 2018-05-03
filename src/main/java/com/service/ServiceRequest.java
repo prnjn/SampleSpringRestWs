@@ -1,6 +1,5 @@
 package com.service;
 
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,24 +18,32 @@ public class ServiceRequest {
 	@Autowired
 	private RetrieveBusinessData retrieveBusinessData;
 	
-	public EmployeeResponseData getEmployeeDetails(String empId) throws EmployeeNotFoundException,InvalidRequestDataException{
+	public EmployeeResponseData getEmployeeDetails(String empId)/* throws EmployeeNotFoundException,InvalidRequestDataException*/{
+		int employeeId=0;
+		
+		if(StringUtils.isNumeric(empId)) {
+			employeeId = Integer.parseInt(empId);
+		}
 		EmployeeResponseData employeeResponseData=null;
 		
-		if(isValidEmployeeID(empId)) {
-			 int employeeId = Integer.parseInt(empId);
-			 employeeResponseData =retrieveBusinessData.retrieveEmployeeDetails(employeeId);
-		}else {
-				LOGGER.info("Invaid Employee Id in request : "+empId);
-				throw new InvalidRequestDataException(empId);
+		if(!isValidEmployeeID(empId)) {
+			LOGGER.info("invalid Request Data");
+			throw new InvalidRequestDataException(empId);
+		}else if(!isEmployeeExist(employeeId)) {
+			LOGGER.info("Employee Id not found");
+			throw new EmployeeNotFoundException(empId);
+		}else{
+			 employeeResponseData =retrieveBusinessData.retrieveEmployeeDetails(employeeId);	
 		}
 		return employeeResponseData;
 	}
 	
 	private boolean isValidEmployeeID(String empId) {
-		boolean isValidEmp = false;
-		isValidEmp=StringUtils.isNumeric(empId);
-		return isValidEmp;
+		 return StringUtils.isNumeric(empId);
 	}
 	
-	
+	private boolean isEmployeeExist(int employeeId) {
+		
+		return employeeId==756560 ? true : false;
+	}
 }

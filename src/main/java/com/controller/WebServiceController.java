@@ -22,17 +22,20 @@ public class WebServiceController {
 	
 	@RequestMapping(value="restws/getEmpDetails/{empId}",method=RequestMethod.GET)
 	//@ResponseBody   // not required since using @RestController
-	public ResponseEntity<?> getEmployeeDetails(@PathVariable("empId") String empId) {
+	public ResponseEntity<?> getEmployeeDetails(@PathVariable("empId") String empId) /*throws EmployeeNotFoundException, InvalidRequestDataException*/{
 		
 		EmployeeResponseData data;
-		try {
-			data = serviceRequest.getEmployeeDetails(empId);
-			return new ResponseEntity<EmployeeResponseData>(data,HttpStatus.OK);
-		} catch (EmployeeNotFoundException | InvalidRequestDataException e) {
-			ServiceErrorResponse errorResponse = new ServiceErrorResponse(e.getMessage());
-			//= new ServiceErrorResponse("Data not found for Employee Id :"+empId);
-			return new ResponseEntity<ServiceErrorResponse>(errorResponse , HttpStatus.NOT_FOUND);
-		}
+		data = serviceRequest.getEmployeeDetails(empId);
+		return new ResponseEntity<EmployeeResponseData>(data,HttpStatus.OK);
+		
+//		try {
+//			data = serviceRequest.getEmployeeDetails(empId);
+//			return new ResponseEntity<EmployeeResponseData>(data,HttpStatus.OK);
+//		} catch (EmployeeNotFoundException | InvalidRequestDataException e) {
+//			ServiceErrorResponse errorResponse = new ServiceErrorResponse(e.getMessage());
+//			//= new ServiceErrorResponse("Data not found for Employee Id :"+empId);
+//			return new ResponseEntity<ServiceErrorResponse>(errorResponse , HttpStatus.NOT_FOUND);
+//		}
 	}
 	
 }
