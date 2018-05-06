@@ -18,7 +18,7 @@ public class ServiceRequest {
 	@Autowired
 	private RetrieveBusinessData retrieveBusinessData;
 	
-	public EmployeeResponseData getEmployeeDetails(String empId)/* throws EmployeeNotFoundException,InvalidRequestDataException*/{
+	public EmployeeResponseData getEmployeeDetails(String empId){
 		int employeeId=0;
 		
 		if(StringUtils.isNumeric(empId)) {

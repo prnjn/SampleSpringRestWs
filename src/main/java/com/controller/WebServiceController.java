@@ -9,9 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.beans.EmployeeResponseData;
-import com.errorResponse.ServiceErrorResponse;
-import com.exception.EmployeeNotFoundException;
-import com.exception.InvalidRequestDataException;
 import com.service.ServiceRequest;
 
 @RestController
@@ -22,20 +19,12 @@ public class WebServiceController {
 	
 	@RequestMapping(value="restws/getEmpDetails/{empId}",method=RequestMethod.GET)
 	//@ResponseBody   // not required since using @RestController
-	public ResponseEntity<?> getEmployeeDetails(@PathVariable("empId") String empId) /*throws EmployeeNotFoundException, InvalidRequestDataException*/{
+	public ResponseEntity<?> getEmployeeDetails(@PathVariable("empId") String empId){
 		
 		EmployeeResponseData data;
 		data = serviceRequest.getEmployeeDetails(empId);
 		return new ResponseEntity<EmployeeResponseData>(data,HttpStatus.OK);
-		
-//		try {
-//			data = serviceRequest.getEmployeeDetails(empId);
-//			return new ResponseEntity<EmployeeResponseData>(data,HttpStatus.OK);
-//		} catch (EmployeeNotFoundException | InvalidRequestDataException e) {
-//			ServiceErrorResponse errorResponse = new ServiceErrorResponse(e.getMessage());
-//			//= new ServiceErrorResponse("Data not found for Employee Id :"+empId);
-//			return new ResponseEntity<ServiceErrorResponse>(errorResponse , HttpStatus.NOT_FOUND);
-//		}
+
 	}
 	
 }
